@@ -1,6 +1,6 @@
 # Awesome CVPR 2024 Papers, Workshops, Challenges, and Tutorials!
 
-<img src="https://opendrivelab.com/assets/icon/cvpr/cvpr2024_white.png">
+<img src="https://hirokatsukataoka16.github.io/CVPR-2024-LIMIT/img/CVPR_LogoSeattle_2024_Primary.jpg">
 
 ![visitors](https://visitor-badge.laobi.icu/badge?page_id=harpreetsahota204.awesome-cvpr-2024)
 
