@@ -56,18 +56,18 @@ def collect_manual_data(entries: List[str]) -> Dict[str, List[Dict[str, str]]]:
             print(f"Error processing entry: {entry}. Error: {e}")
     return data
 
-
 def generate_code_badge(code_url: str) -> str:
     """
-    Generate a markdown badge for GitHub repositories.
+    Generate a markdown badge for GitHub repositories, handling potential trailing slash in the URL.
     
     :param code_url: URL of the code repository.
     :return: Markdown formatted badge.
     """
     if 'github.com' in code_url:
-        repo_name = code_url.replace('https://github.com/', '')
+        # Remove trailing slash if present and extract the repository name
+        repo_name = code_url.rstrip('/').replace('https://github.com/', '')
         return f"[![GitHub](https://img.shields.io/github/stars/{repo_name}?style=social)]({code_url})"
-    return f"[Code]({code_url})"
+    return f""
 
 def generate_arxiv_badge(arxiv_url: str) -> str:
     """
@@ -84,23 +84,31 @@ def generate_arxiv_badge(arxiv_url: str) -> str:
 
 def generate_markdown_tables(data: Dict[str, List[Dict[str, Any]]]) -> Dict[str, str]:
     """
-    Generate Markdown tables from the data dictionary.
+    Generate Markdown tables from the data dictionary, combining the code and arXiv columns,
+    and hyperlinking the title to the project page if available.
 
     :param data: Data dictionary with topics as keys and list of entries as values.
     :return: A dictionary of Markdown tables by topic.
     """
     tables = defaultdict(str)
     for topic, entries in data.items():
-        # Adjusted header for center alignment
-        header = "|:-------------------|:---------|:--------------:|:--------------:|:--------------:|:----------------------|\n"
-        table = "| Title | Authors | Code | arXiv Page | Project Page | Summary |\n" + header
+        # Adjusted header for center alignment and removed Project Page column
+        header = "|:-------------------|:-------------------|:-------------------:|:-------------------:|\n"
+        table = "| Title | Authors | Code / arXiv Page | Summary |\n" + header
         for entry in entries:
             code_badge = generate_code_badge(entry['code'])
             arxiv_badge = generate_arxiv_badge(entry.get('arxiv page', ''))
-            project_link = f"[Project]({entry['project page']})" if entry.get('project page') else ""
             summary = entry.get('summary', '')
 
-            table += f"| {entry['title']} | {entry['authors']} | {code_badge} | {arxiv_badge} | {project_link} | {summary} |\n"
+            # Combine code and arXiv badges into a single column
+            code_arxiv_combined = f"{code_badge} {arxiv_badge}".strip()
+
+            # Hyperlink the title to the project page if available
+            title = entry['title']
+            if entry.get('project page'):
+                title = f"[{title}]({entry['project page']})"
+
+            table += f"| {title} | {entry['authors']} | {code_arxiv_combined} | {summary} |\n"
         tables[topic] = table
     return tables
 
@@ -133,7 +141,6 @@ def update_readme_with_tables(tables: Dict[str, str], readme_path: str):
         file.write(updated_content)
 
     print(f"README has been updated with new tables at {readme_path}")
-
 
 def main():
     """
