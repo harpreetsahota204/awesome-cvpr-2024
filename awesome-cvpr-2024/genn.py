@@ -78,7 +78,7 @@ def generate_arxiv_badge(arxiv_url: str) -> str:
     """
     if 'arxiv.org' in arxiv_url or 'ar5iv.labs' in arxiv_url:
         arxiv_id = arxiv_url.split('/')[-1]
-        return f"[![arXiv](https://img.shields.io/badge/arXiv-{arxiv_id}-b31b1b.svg)]({arxiv_url})"
+        return f"[![arXiv](https://img.shields.io/badge/arXiv-{arxiv_id}-b31b1b.svg?style=for-the-badge)]({arxiv_url})"
     return ""
 
 
