@@ -93,7 +93,7 @@ def generate_markdown_tables(data: Dict[str, List[Dict[str, Any]]]) -> Dict[str,
     tables = defaultdict(str)
     for topic, entries in data.items():
         # Adjusted header for center alignment and removed Project Page column
-        header = "|:-------------------|:-------------------|:-------------------:|:-------------------:|\n"
+        header = "|:-------------------|:-------------------|:-------------------:|:-------------------|\n"
         table = "| Title | Authors | Code / arXiv Page | Summary |\n" + header
         for entry in entries:
             code_badge = generate_code_badge(entry['code'])
